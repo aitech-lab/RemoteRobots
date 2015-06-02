@@ -1,0 +1,27 @@
+extends ../modules/layout
+
+block styles
+block scripts
+
+block header
+    .container
+
+block body
+    .container
+        .row
+            .col-md-1.col-sx-1#buttons
+
+
+            .col-md-6.col-sx-6
+                .well#raphael(style="padding:0;")
+                    
+            .col-md-4.col-sx-4
+                .well
+                    img(width="320px", height="240px")
+            .col-md-1.col-sx-1
+                button.btn.btn-default 1
+                button.btn.btn-default 2
+                button.btn.btn-default 3
+
+block footer
+    .container
