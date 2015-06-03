@@ -1,10 +1,7 @@
 {
-  "name": "Ailove-RemoteRobots",
-  "version": "1.0.0",
-  "description": "Remote robots control",
-  "main": "index.js",
   "dependencies": {
     "MD5": "^1.2.2",
+    "bootstrap": "^3.3.4",
     "coffee-middleware": "^0.2.1",
     "express.io": "^1.1.13",
     "jade": "^1.9.2",
@@ -12,11 +9,5 @@
     "nib": "^1.1.0",
     "redis": "^0.12.1",
     "stylus": "^0.50.0"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "CC-BY-SA",
+  }
 }
