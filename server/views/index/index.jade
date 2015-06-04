@@ -17,7 +17,16 @@ block body
                     
             .col-md-4.col-sx-4
                 .well
-                    img(width="320px", height="240px")
+                    object#rtmpPlayer(data='/rtmpPlayer.swf', type='application/x-shockwave-flash', width='320', height='240')
+                        param(value='false', name='menu')
+                        param(value='noScale', name='scale')
+                        param(value='true', name='allowFullscreen')
+                        param(value='always', name='allowScriptAccess')
+                        param(value='#000000', name='bgcolor')
+                        param(value='high', name='quality')
+                        param(value='opaque', name='wmode')
+                        // To play flv over RTMP without preview
+                        param(value='source=video&server=rtmp://vs43.ailove.ru:1935/webcam/video2.flv', name='flashvars')
             .col-md-1.col-sx-1
                 button.btn.btn-default 1
                 button.btn.btn-default 2
