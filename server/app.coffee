@@ -69,4 +69,4 @@ app.get '/', (req, res)->
 #     # result.user = req.user.displayName
 #     app.io.room(bid).broadcast 'word', result
 
-app.listen 9090
+app.listen 7070
