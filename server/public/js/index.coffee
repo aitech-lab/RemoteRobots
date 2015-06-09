@@ -87,8 +87,8 @@ send = ->
     gcode = generateGCode shapes
     shapes = generateSVG shapes
     
-    group = createShape(shapes)
-    changeTT group 
+    #group = createShape(shapes)
+    #changeTT group 
 
     $.ajax
         url: "/post"
@@ -172,7 +172,7 @@ refreshTasksList = ()->
         for t in tasks.tasks
             json = JSON.parse t 
             tid = "task_#{id++}"
-            $("#queue").prepend("<div id=\"#{tid}\" class=\"thumbnail\"/>")
+            $("#queue").prepend("<span id=\"#{tid}\" class=\"img-thumbnail\" style=\"width:46%;margin:2px;\"/>")
             paper = Raphael tid, "100%", "100%"
             paper.setViewBox(0,0,512,512,true)
             console.log t.shapes
@@ -213,8 +213,8 @@ $ ->
     # ws.emit 'ready' 
     # ws.on 'talk', (data)->alert(data.message)
     
-    setInterval refreshTasksList, 2000
-
+    #setInterval refreshTasksList, 2000
+    refreshTasksList()
 
 
     # rect = paper.rect(W2, H2, 50, 50).attr('fill', '#FFFFFF').attr('fill-opacity',0.5)
