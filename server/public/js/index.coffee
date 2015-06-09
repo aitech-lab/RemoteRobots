@@ -213,7 +213,7 @@ $ ->
     # ws.emit 'ready' 
     # ws.on 'talk', (data)->alert(data.message)
     
-    #setInterval refreshTasksList, 2000
+    setInterval refreshTasksList, 2000
     refreshTasksList()
 
 
