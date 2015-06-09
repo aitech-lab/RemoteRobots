@@ -36,6 +36,7 @@ changeTT = (e)->
 onButtonClick = (e)=>
     p = e.data.value
     shape = createShape(p)
+        .translate(206,206)
     changeTT shape
 
 createShape = (p)=>
@@ -53,15 +54,14 @@ generateButtons = ()=>
     w = 32
     for p in shapes
         bid = "svgbtn#{id}"
-        btn = $ "<button id=\"#{bid}\" class=\"btn btn-default\" style=\"padding:0; width:#{w}px; height:#{w}px;\"></button>"
+        btn = $ "<button id=\"#{bid}\" width=\"16px\" height=\"16px\" class=\"btn btn-default\" style=\"margin:0px; margin-right:4px; padding:4px;padding-bottom:0px;\"></button>"
         btns.append btn
         btn.on "click", value: p, onButtonClick
-        paper = Raphael bid, w, w
+        paper = Raphael bid, 16, 16
+        paper.setViewBox(0,0,100,100)
         shape = paper.path(p)
             .attr("fill","#666")
             .attr("stroke", "none")
-            .translate(-34,-34)
-            .scale(0.2,0.2,50,50)
         id++
 
 send = ->
@@ -166,12 +166,13 @@ setupPlayer = ()=>
 
 refreshTasksList = ()->
 
-    $.get "tasks", (tasks)->
+    $.get "/tasks", (tasks)->
         id = 0
+        $("#queue").empty()
         for t in tasks.tasks
             json = JSON.parse t 
             tid = "task_#{id++}"
-            $("#queue").append("<div id=\"#{tid}\" class=\"thumbnail\"/>")
+            $("#queue").prepend("<div id=\"#{tid}\" class=\"thumbnail\"/>")
             paper = Raphael tid, "100%", "100%"
             paper.setViewBox(0,0,512,512,true)
             console.log t.shapes
@@ -181,7 +182,7 @@ refreshTasksList = ()->
                 .attr("fill","#none")
 
 
-$ =>
+$ ->
     
     generateButtons()
     setupPlayer()
@@ -207,8 +208,12 @@ $ =>
         canvas.clear()
 
     $("#send").click send
-
-    refreshTasksList()
+    
+    # ws = io.connect()
+    # ws.emit 'ready' 
+    # ws.on 'talk', (data)->alert(data.message)
+    
+    setInterval refreshTasksList, 2000
 
 
 

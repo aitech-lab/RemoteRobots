@@ -23,8 +23,7 @@ rd = RD.createClient(6379, "vs43.ailove.ru")
 
 app.configure ->
 
-    # static
-    
+    app.use express.compress()
     app.use express.bodyParser()
     # app.use express.urlencoded extended: true
     # app.use express.json()  
@@ -35,6 +34,7 @@ app.configure ->
         res.header "Access-Control-Allow-Headers", "X-Requested-With"
         next()
     
+    # static
     app.use express.static pub
 
     app.set 'views'      , views
@@ -68,6 +68,12 @@ app.get '/tasks',   (req,res)->
             res.send 
                 ctask: ctask
                 tasks: tasks
+
+
+app.io.route 'ready', (req)->
+    req.io.emit 'talk',
+        message: 'io event from an io route on the server'
+
 
 app.post '/post', (req, res)->
     # console.log req.body

@@ -1,6 +1,13 @@
 extends ../modules/layout
 
 block styles
+    style.
+        .top5 {
+            margin-top:5px;
+        }
+        .right5 {
+            margin-right:5px;
+        }
 block scripts
 
 block header
@@ -10,8 +17,7 @@ block body
     .container
         .row
             .col-md-6.col-sx-6#buttons
-            | &nbsp;
-        .row
+        .row.top-buffer.top5
             .col-md-6.col-sx-6
                 .panel.panel-default
                     .panel-body#raphael(style="padding:0;")
