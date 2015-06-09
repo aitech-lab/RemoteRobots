@@ -45,6 +45,7 @@ createShape = (p)=>
         .attr("stroke-width",4)
         .attr("fill","#FFF")
         .attr("fill-opacity",0.3)
+        # .attr("style", "vector-effect: non-scaling-stroke;")
 
 generateButtons = ()=>
     btns = $("#buttons")
@@ -82,18 +83,36 @@ send = ->
             shapes = shapes.concat d
     
     # tt.showHandles()
-    # group = createShape(shapes.toString())
-    # changeTT group 
 
     gcode = generateGCode shapes
+    shapes = generateSVG shapes
+    
+    group = createShape(shapes)
+    changeTT group 
+
     $.ajax
         url: "/post"
         method: "POST"
         # contentType: "application/json"
         data:
             gcode: gcode
-            shapes: shapes.toString()
+            shapes: shapes
 
+
+generateSVG = (shapes)=>
+    SVG = []
+    pr = 4
+    for e in shapes 
+        c = e[0]
+        switch c
+            when "M"
+                SVG.push "Z" if SVG.length
+                SVG.push "M #{e[1].toFixed(pr)},#{e[2].toFixed(pr)}"
+            when "L"
+                SVG.push "L #{e[1].toFixed(pr)},#{e[2].toFixed(pr)}"
+            when "C"
+                SVG.push "L #{e[5].toFixed(pr)},#{e[6].toFixed(pr)}"
+    SVG.join " "
 
 generateGCode = (shapes)=>
     G = ["G28"]
@@ -107,6 +126,7 @@ generateGCode = (shapes)=>
     lt = null
     for e in shapes 
         c = e[0]
+        console.log c
         switch c
             when "M"
                 G.push "G1 X#{lt.x} Y#{lt.y} Z#{UP}" if lt # up at last point if there is one
@@ -118,6 +138,7 @@ generateGCode = (shapes)=>
             when "C"
                 lt = x: (e[5]+dx)*sx, y:(e[6]+dy)*sy
                 G.push "G1 X#{lt.x.toFixed(pr)} Y#{lt.y.toFixed(pr)}"
+
     G.push "G28"
     G.join "\n"
             
@@ -142,6 +163,24 @@ setupPlayer = ()=>
         height   : 240
         primary  : "flash"
 
+
+refreshTasksList = ()->
+
+    $.get "tasks", (tasks)->
+        id = 0
+        for t in tasks.tasks
+            json = JSON.parse t 
+            tid = "task_#{id++}"
+            $("#queue").append("<div id=\"#{tid}\" class=\"thumbnail\"/>")
+            paper = Raphael tid, "100%", "100%"
+            paper.setViewBox(0,0,512,512,true)
+            console.log t.shapes
+            shape = paper.path(json.shapes)
+                .attr("stroke", "#666")
+                .attr("stroke-width", "4")
+                .attr("fill","#none")
+
+
 $ =>
     
     generateButtons()
@@ -152,7 +191,7 @@ $ =>
 
     resize = ()=>
         W = 512
-        H = W
+        H = 512
         W2= W>>1
         H2= H>>1
         paper.setSize W, H if paper
@@ -168,6 +207,8 @@ $ =>
         canvas.clear()
 
     $("#send").click send
+
+    refreshTasksList()
 
 
 

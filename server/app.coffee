@@ -58,14 +58,20 @@ app.configure ->
     app.use express.errorHandler()
 
 app.get '/', (req, res)->
+    res.render 'index', req: req
+    
+app.get '/tasks',   (req,res)->
     rd.lrange "tasks", 0, -1, (err, tasks)->
-        # console.log err, tasks
-        res.render 'index', req: req, tasks:tasks
+        return res.send err if err
+        rd.get "ctask", (err, ctask)->
+            return res.send err if err
+            res.send 
+                ctask: ctask
+                tasks: tasks
 
 app.post '/post', (req, res)->
-    console.log req.body
+    # console.log req.body
     rd.lpush "tasks", JSON.stringify(req.body),(err, res)->console.log err, res
-
     res.send "{response: ok}"
 
 
