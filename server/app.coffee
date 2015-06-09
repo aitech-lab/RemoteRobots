@@ -7,29 +7,35 @@ express   = require 'express.io'
 stylus    = require 'stylus'
 nib       = require 'nib'
 coffee    = require 'coffee-middleware'
+RD        = require 'redis'
 
 pub    = __dirname + '/public'
 views  = __dirname + '/views'
+
+port = 7070
 
 app  = do express
 http = do app.http
 io   = do app.io
 io.set "origin", "*:*"
 
+rd = RD.createClient(6379, "vs43.ailove.ru")
 
 app.configure ->
 
     # static
-    app.use express.static pub
     
+    app.use express.bodyParser()
+    # app.use express.urlencoded extended: true
+    # app.use express.json()  
+    app.use express.cookieParser()
+
     app.get '/*', (req, res, next) ->
         res.header "Access-Control-Allow-Origin", "*"
         res.header "Access-Control-Allow-Headers", "X-Requested-With"
         next()
-
-    app.use express.cookieParser()
-    app.use express.bodyParser()
-    console.log express.session
+    
+    app.use express.static pub
 
     app.set 'views'      , views
     app.set 'view engine', 'jade'
@@ -52,8 +58,16 @@ app.configure ->
     app.use express.errorHandler()
 
 app.get '/', (req, res)->
+    rd.lrange "tasks", 0, -1, (err, tasks)->
+        # console.log err, tasks
+        res.render 'index', req: req, tasks:tasks
 
-    res.render 'index', req: req
+app.post '/post', (req, res)->
+    console.log req.body
+    rd.lpush "tasks", JSON.stringify(req.body),(err, res)->console.log err, res
+
+    res.send "{response: ok}"
+
 
 # app.io.route 'ready', (req)->
 #     console.log "NEW USER AT #{req.data}"
@@ -68,5 +82,5 @@ app.get '/', (req, res)->
 #     console.log result
 #     # result.user = req.user.displayName
 #     app.io.room(bid).broadcast 'word', result
-
-app.listen 7070
+console.log port
+app.listen port

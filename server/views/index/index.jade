@@ -7,32 +7,46 @@ block header
     .container
 
 block body
-    .container
-        .row
-            h1 Рисующий робот   
+    .container 
         .row
             .col-md-1.col-sx-1#buttons
 
-
             .col-md-6.col-sx-6
-                .well#raphael(style="padding:0;")
+                .panel.panel-default
+                    .panel-body#raphael(style="padding:0;")
                     
-            .col-md-4.col-sx-4
-                .well
-                    object#rtmpPlayer(data='/rtmpPlayer.swf', type='application/x-shockwave-flash', width='320', height='240')
-                        param(value='false', name='menu')
-                        param(value='noScale', name='scale')
-                        param(value='true', name='allowFullscreen')
-                        param(value='always', name='allowScriptAccess')
-                        param(value='#000000', name='bgcolor')
-                        param(value='high', name='quality')
-                        param(value='opaque', name='wmode')
-                        // To play flv over RTMP without preview
-                        param(value='source=video&server=rtmp://vs43.ailove.ru:1935/webcam/video2.flv', name='flashvars')
-            .col-md-1.col-sx-1
-                button.btn.btn-default 1
-                button.btn.btn-default 2
-                button.btn.btn-default 3
+                        .row(style="position:absolute;top:0%; right:0%; margin-right:22px;")
+                            button.btn.btn-danger.navbar-btn#remove 
+                                span.glyphicon.glyphicon-remove
+                            | &nbsp;
+                            button.btn.btn-danger.navbar-btn#trash 
+                                span.glyphicon.glyphicon-trash
+                            | &nbsp;
+                            button.btn.btn-success.navbar-btn#send
+                                span.glyphicon.glyphicon-pencil
+                    
+            .col-md-4.col-sx-6
+                .panel.panel-default
+                    .panel-body
+                        #video1
+                        | &nbsp;
+                        #video2 
+                //- each val, i in tasks
+                //-     svg.img-thumbnail(with="64", height="64", viewBox="0,0,512,512")
+                //-         path(d="#{JSON.parse(val).shapes}", stroke="#000", fill="none", stroke-width="10")
+
+            //- .col-md-1.col-sx-1
+            //-     button.btn.btn-default 
+            //-         span.glyphicon.glyphicon-facetime-video
+            //-         |&nbsp; 1 
+            //-     button.btn.btn-default
+            //-         span.glyphicon.glyphicon-facetime-video
+            //-         |&nbsp; 2 
+            //-     button.btn.btn-default
+            //-         span.glyphicon.glyphicon-facetime-video
+            //-         |&nbsp; 2 
+
+
 
 block footer
     .container
