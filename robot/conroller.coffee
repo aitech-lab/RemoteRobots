@@ -15,13 +15,16 @@ getNextTask = ()=>
 
     if not waitingTask    
         waitingTask = true
+        rd.del "ctask", (err, res)->
+            console.log err if err
         rd.brpop "tasks", 0, (err, task)=>
             console.log err, task
             waitingTask = false
             if err
                 console.log err
                 return
-
+            rd.set "ctask", task[1], (err, res)->
+                console.log err if err
             task = JSON.parse(task[1])
             commands = task.gcode.split("\n")
             console.log commands
